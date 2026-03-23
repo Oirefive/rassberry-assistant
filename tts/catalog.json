@@ -1,0 +1,115 @@
+{
+  "provider": "piper",
+  "models": [
+    {
+      "key": "ru_RU-irina-medium",
+      "label": "Irina • Russian • medium",
+      "voice_name": "irina",
+      "language_code": "ru_RU",
+      "language_name": "Russian",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/ru_RU-irina-medium/ru_RU-irina-medium.onnx",
+      "relative_config_path": "tts/piper/ru_RU-irina-medium/ru_RU-irina-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx"
+    },
+    {
+      "key": "ru_RU-ruslan-medium",
+      "label": "Ruslan • Russian • medium",
+      "voice_name": "ruslan",
+      "language_code": "ru_RU",
+      "language_name": "Russian",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/ru_RU-ruslan-medium/ru_RU-ruslan-medium.onnx",
+      "relative_config_path": "tts/piper/ru_RU-ruslan-medium/ru_RU-ruslan-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx"
+    },
+    {
+      "key": "ru_RU-denis-medium",
+      "label": "Denis • Russian • medium",
+      "voice_name": "denis",
+      "language_code": "ru_RU",
+      "language_name": "Russian",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/ru_RU-denis-medium/ru_RU-denis-medium.onnx",
+      "relative_config_path": "tts/piper/ru_RU-denis-medium/ru_RU-denis-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx"
+    },
+    {
+      "key": "ru_RU-dmitri-medium",
+      "label": "Dmitri • Russian • medium",
+      "voice_name": "dmitri",
+      "language_code": "ru_RU",
+      "language_name": "Russian",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/ru_RU-dmitri-medium/ru_RU-dmitri-medium.onnx",
+      "relative_config_path": "tts/piper/ru_RU-dmitri-medium/ru_RU-dmitri-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx"
+    },
+    {
+      "key": "en_US-amy-medium",
+      "label": "Amy • English • medium",
+      "voice_name": "amy",
+      "language_code": "en_US",
+      "language_name": "English",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/en_US-amy-medium/en_US-amy-medium.onnx",
+      "relative_config_path": "tts/piper/en_US-amy-medium/en_US-amy-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx"
+    },
+    {
+      "key": "en_US-kristin-medium",
+      "label": "Kristin • English • medium",
+      "voice_name": "kristin",
+      "language_code": "en_US",
+      "language_name": "English",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/en_US-kristin-medium/en_US-kristin-medium.onnx",
+      "relative_config_path": "tts/piper/en_US-kristin-medium/en_US-kristin-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/kristin/medium/en_US-kristin-medium.onnx"
+    },
+    {
+      "key": "en_US-lessac-high",
+      "label": "Lessac • English • high",
+      "voice_name": "lessac",
+      "language_code": "en_US",
+      "language_name": "English",
+      "quality": "high",
+      "relative_model_path": "tts/piper/en_US-lessac-high/en_US-lessac-high.onnx",
+      "relative_config_path": "tts/piper/en_US-lessac-high/en_US-lessac-high.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx"
+    },
+    {
+      "key": "en_GB-jenny_dioco-medium",
+      "label": "Jenny Dioco • English • medium",
+      "voice_name": "jenny_dioco",
+      "language_code": "en_GB",
+      "language_name": "English",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/en_GB-jenny_dioco-medium/en_GB-jenny_dioco-medium.onnx",
+      "relative_config_path": "tts/piper/en_GB-jenny_dioco-medium/en_GB-jenny_dioco-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx"
+    },
+    {
+      "key": "fr_FR-siwis-medium",
+      "label": "Siwis • French • medium",
+      "voice_name": "siwis",
+      "language_code": "fr_FR",
+      "language_name": "French",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/fr_FR-siwis-medium/fr_FR-siwis-medium.onnx",
+      "relative_config_path": "tts/piper/fr_FR-siwis-medium/fr_FR-siwis-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx"
+    },
+    {
+      "key": "it_IT-paola-medium",
+      "label": "Paola • Italian • medium",
+      "voice_name": "paola",
+      "language_code": "it_IT",
+      "language_name": "Italian",
+      "quality": "medium",
+      "relative_model_path": "tts/piper/it_IT-paola-medium/it_IT-paola-medium.onnx",
+      "relative_config_path": "tts/piper/it_IT-paola-medium/it_IT-paola-medium.onnx.json",
+      "source_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/it/it_IT/paola/medium/it_IT-paola-medium.onnx"
+    }
+  ]
+}

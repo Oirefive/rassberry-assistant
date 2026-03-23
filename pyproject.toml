@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rassberry-assistant"
+version = "0.1.0"
+description = "Voice assistant for Raspberry Pi with offline STT/TTS, command control plane, and OpenRouter fallback"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "PyYAML>=6.0.1",
+  "requests>=2.32.0",
+  "vosk>=0.3.45",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

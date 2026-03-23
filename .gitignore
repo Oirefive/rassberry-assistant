@@ -1,0 +1,50 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Local secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+*.pfx
+*.secret
+*.token
+
+# Runtime and logs
+logs/
+runtime/
+models/
+*.log
+
+# Temporary tooling and archives
+.tools/
+*.tar.gz
+
+# Local editors and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Large optional assets kept out of the public repo
+assets/voice_pack/**
+!assets/voice_pack/README.md
+assets/dashboard/*.mp4
+assets/dashboard/*.webm
+assets/dashboard/*.mov
+assets/dashboard/*.png
+assets/dashboard/*.jpg
+assets/dashboard/*.jpeg
+!assets/dashboard/README.md
+
+# Downloaded TTS models
+tts/piper/**
+!tts/README.md
+!tts/catalog.json

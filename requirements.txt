@@ -1,0 +1,6 @@
+PyYAML>=6.0.1
+requests>=2.32.0
+vosk>=0.3.45
+piper-tts>=1.4.1
+onnxruntime<1.23
+pathvalidate>=3.2.3

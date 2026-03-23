@@ -1,0 +1,55 @@
+{
+  "bind_host": "0.0.0.0",
+  "port": 8766,
+  "token": "change-me",
+  "apps": {
+    "browser": {
+      "label": "Microsoft Edge",
+      "voice_selector": "Edge",
+      "aliases": ["браузер", "edge", "эдж", "интернет"],
+      "command": ["%ProgramFiles(x86)%\\Microsoft\\Edge\\Application\\msedge.exe"]
+    },
+    "firefox": {
+      "label": "Firefox",
+      "voice_selector": "Edge",
+      "aliases": ["firefox", "файрфокс", "мозилла"],
+      "command": ["%ProgramFiles%\\Mozilla Firefox\\firefox.exe"]
+    },
+    "telegram": {
+      "label": "Telegram",
+      "voice_selector": "telegram",
+      "aliases": ["telegram", "телеграм", "телеграмм", "телега"],
+      "command": ["%APPDATA%\\Telegram Desktop\\Telegram.exe"]
+    },
+    "vlc": {
+      "label": "VLC",
+      "voice_selector": "vlc",
+      "aliases": ["vlc", "влс", "видео", "плеер"],
+      "command": ["%ProgramFiles%\\VideoLAN\\VLC\\vlc.exe"]
+    },
+    "explorer": {
+      "label": "Проводник",
+      "voice_selector": "Windows 95",
+      "aliases": ["проводник", "файлы", "explorer"],
+      "command": ["C:\\Windows\\explorer.exe"]
+    },
+    "notepad": {
+      "label": "Блокнот",
+      "voice_selector": "Windows 95",
+      "aliases": ["блокнот", "notepad"],
+      "command": ["C:\\Windows\\System32\\notepad.exe"]
+    },
+    "calculator": {
+      "label": "Калькулятор",
+      "voice_selector": "Windows 95",
+      "aliases": ["калькулятор", "calc"],
+      "command": ["C:\\Windows\\System32\\calc.exe"]
+    },
+    "lock_pc": {
+      "label": "Блокировка компьютера",
+      "voice_selector": "Блок экрана",
+      "aliases": ["заблокируй компьютер", "заблокируй пк", "блокировка компьютера"],
+      "command": ["rundll32.exe", "user32.dll,LockWorkStation"]
+    }
+  }
+}

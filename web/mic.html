@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oirefive Mic</title>
+    <link rel="stylesheet" href="/mic.css" />
+  </head>
+  <body>
+    <main class="mic-shell">
+      <section class="mic-panel">
+        <div class="eyebrow">Wi-Fi Mic</div>
+        <h1>Телефон как микрофон</h1>
+        <p id="secureHint" class="muted">
+          Разрешите микрофон и держите эту страницу открытой, пока говорите с ассистентом.
+        </p>
+
+        <div class="meter-block">
+          <div class="meter-label">Уровень</div>
+          <div class="meter-bar"><div id="levelFill" class="meter-fill"></div></div>
+        </div>
+
+        <div class="status-grid">
+          <div class="status-card">
+            <div class="label">Статус</div>
+            <div id="statusText" class="value">Ожидаю запуск.</div>
+          </div>
+          <div class="status-card">
+            <div class="label">Сервер</div>
+            <div id="serverText" class="value">-</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="startBtn" class="primary-button" type="button">Включить микрофон</button>
+          <button id="stopBtn" class="ghost-button" type="button" disabled>Остановить</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="/mic.js"></script>
+  </body>
+</html>

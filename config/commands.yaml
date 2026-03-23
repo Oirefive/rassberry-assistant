@@ -1,0 +1,190 @@
+# Базовый набор локальных команд.
+# Для действий через Home Assistant или кастомные скрипты просто дублируй блоки ниже.
+
+commands:
+  - id: time_now
+    phrases:
+      - "который час"
+      - "скажи время"
+      - "сколько времени"
+    action:
+      type: shell
+      command: "date '+%H:%M'"
+      ok_text: "Сейчас {stdout}."
+
+  - id: today_date
+    phrases:
+      - "какое сегодня число"
+      - "какая сегодня дата"
+      - "скажи дату"
+    action:
+      type: shell
+      command: "date '+%d %B %Y'"
+      ok_text: "Сегодня {stdout}."
+
+  - id: ip_address
+    phrases:
+      - "какой у тебя ip"
+      - "скажи ip адрес"
+      - "покажи ip"
+    action:
+      type: shell
+      command: "hostname -I | awk '{print $1}'"
+      ok_text: "Мой IP адрес {stdout}."
+
+  - id: cpu_temperature
+    phrases:
+      - "какая температура процессора"
+      - "температура процессора"
+      - "насколько ты горячий"
+    action:
+      type: shell
+      command: "vcgencmd measure_temp | cut -d= -f2"
+      ok_text: "Температура процессора {stdout}."
+
+  - id: free_memory
+    phrases:
+      - "сколько свободной памяти"
+      - "свободная память"
+      - "память"
+    action:
+      type: shell
+      command: "free -h | awk '/Mem:/ {print $7 \" свободно из \" $2}'"
+      ok_text: "Сейчас {stdout}."
+
+  - id: volume_up
+    phrases:
+      - "сделай громче"
+      - "увеличь громкость"
+      - "прибавь звук"
+      - "громкость вверх"
+    action:
+      type: shell
+      command: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ >/dev/null && wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2*100) \"%\"}'"
+      ok_voice:
+        - "+Громкость"
+      error_text: "Не получилось изменить громкость."
+
+  - id: volume_down
+    phrases:
+      - "сделай тише"
+      - "уменьши громкость"
+      - "убавь звук"
+      - "громкость вниз"
+    action:
+      type: shell
+      command: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- >/dev/null && wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2*100) \"%\"}'"
+      ok_voice:
+        - "-Громкость"
+      error_text: "Не получилось изменить громкость."
+
+  - id: uptime
+    phrases:
+      - "как давно ты работаешь"
+      - "сколько ты работаешь"
+      - "время работы системы"
+    action:
+      type: shell
+      command: "uptime -p"
+      ok_text: "{stdout}."
+
+  - id: assistant_exit
+    phrases:
+      - "выключись"
+      - "заверши работу"
+      - "отключись"
+    action:
+      type: assistant.exit
+      ok_text: "Отключаюсь."
+      ok_voice:
+        - "Все идет по плану"
+
+  - id: turn_on_music
+    disabled: true
+    phrases:
+      - "включи музыку"
+      - "запусти музыку"
+    action:
+      type: shell
+      command: "playerctl play"
+      ok_voice:
+        - "вкл музыку"
+      error_text: "Плеер не ответил."
+
+  - id: turn_on_tv
+    disabled: true
+    phrases:
+      - "включи телевизор"
+      - "включи тв"
+    action:
+      type: http
+      method: POST
+      url: "http://homeassistant.local:8123/api/services/switch/turn_on"
+      headers:
+        Authorization: "Bearer {env_HOME_ASSISTANT_TOKEN}"
+        Content-Type: "application/json"
+      json:
+        entity_id: "switch.tv"
+      ok_voice:
+        - "вкл телевизор"
+      error_text: "Телевизор не ответил."
+
+  - id: home_assistant_conversation
+    regex:
+      - "^(?:дом|умный дом) (?P<query>.+)$"
+      - "^(?:по дому) (?P<query>.+)$"
+    action:
+      type: http
+      method: POST
+      url: "{env_HOME_ASSISTANT_URL}/api/conversation/process"
+      headers:
+        Authorization: "Bearer {env_HOME_ASSISTANT_TOKEN}"
+        Content-Type: "application/json"
+      json:
+        text: "{query}"
+        language: "ru"
+      ok_text: "{json_response_speech_plain_speech}"
+      error_text: "Дом сейчас молчит."
+      error_voice:
+        - "что-то не так"
+
+  - id: pc_launch_known_app
+    regex:
+      - "^(?:открой(?:те)?|запусти(?:те)?|включи) (?P<pc_app>браузер|edge|эдж|firefox|файрфокс|мозилла|телеграм|телеграмм|telegram|телега|олега|олега|vlc|влс|проводник|файлы|блокнот|notepad|калькулятор|calc)$"
+      - "^(?:открой(?:те)?|запусти(?:те)?|включи) на (?:компьютере|пк) (?P<pc_app>.+)$"
+    action:
+      type: http
+      method: POST
+      url: "http://{env_WINDOWS_AGENT_HOST}:{env_WINDOWS_AGENT_PORT}/api/launch"
+      headers:
+        X-Assistant-Token: "{env_WINDOWS_AGENT_TOKEN}"
+        Content-Type: "application/json"
+      json:
+        query: "{pc_app}"
+      ok_text: "{json_message}"
+      ok_voice:
+        - "{json_voice_selector}"
+      error_text: "{json_message}"
+      error_voice:
+        - "что-то не так"
+
+  - id: pc_lock
+    phrases:
+      - "заблокируй компьютер"
+      - "заблокируй пк"
+      - "блокировка компьютера"
+    action:
+      type: http
+      method: POST
+      url: "http://{env_WINDOWS_AGENT_HOST}:{env_WINDOWS_AGENT_PORT}/api/launch"
+      headers:
+        X-Assistant-Token: "{env_WINDOWS_AGENT_TOKEN}"
+        Content-Type: "application/json"
+      json:
+        app_id: "lock_pc"
+      ok_text: "{json_message}"
+      ok_voice:
+        - "{json_voice_selector}"
+      error_text: "{json_message}"
+      error_voice:
+        - "что-то не так"

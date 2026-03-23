@@ -1,0 +1,20 @@
+[Unit]
+Description=Rassberry Voice Assistant
+After=network-online.target sound.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__APP_USER__
+WorkingDirectory=__APP_DIR__
+EnvironmentFile=-__APP_DIR__/.env
+Environment=XDG_RUNTIME_DIR=/run/user/__APP_UID__
+ExecStartPre=/bin/sh -c '/usr/bin/amixer -c Microphone sset Mic 70%% cap >/dev/null 2>&1 || true'
+ExecStart=__APP_DIR__/.venv/bin/python -m rassberry_assistant --project-root __APP_DIR__
+Restart=always
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

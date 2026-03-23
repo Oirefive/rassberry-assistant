@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ассистент</title>
+    <link rel="stylesheet" href="/dashboard.css" />
+  </head>
+  <body data-phase="idle">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="sidebar-brand sidebar-brand-link" href="https://github.com/Oirefive" target="_blank" rel="noreferrer">
+          <img
+            class="sidebar-avatar"
+            src="https://github.com/Oirefive.png?size=160"
+            alt="Oirefive GitHub avatar"
+          />
+          <div class="sidebar-copy">
+            <div class="sidebar-title">github.com</div>
+            <div class="sidebar-name">Oirefive</div>
+          </div>
+        </a>
+
+        <nav class="sidebar-nav">
+          <button class="nav-item is-active" data-view-target="chat">
+            <span class="nav-label">Чат</span>
+            <span class="nav-hint">Runtime и LLM</span>
+          </button>
+          <button class="nav-item" data-view-target="commands">
+            <span class="nav-label">Команды</span>
+            <span class="nav-hint">Триггеры и действия</span>
+          </button>
+          <button class="nav-item" data-view-target="system">
+            <span class="nav-label">Система</span>
+            <span class="nav-hint">Аудио, TTS, ввод</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="network-dot"></div>
+          <span id="networkLabel">В сети</span>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-header">
+          <div class="workspace-headline">
+            <div class="eyebrow">LOCAL CONTROL STACK</div>
+            <h1 id="assistantName" class="workspace-title">Ассистент</h1>
+            <p id="phaseMessage" class="workspace-subtitle">Жду слово активации.</p>
+          </div>
+          <div class="header-status">
+            <div id="phasePill" class="phase-pill">ОЖИДАНИЕ</div>
+            <div id="statusText" class="status-line">Ожидание</div>
+            <div id="statusSubtext" class="status-hint">Жду слово активации.</div>
+          </div>
+        </header>
+
+        <section class="view is-active" data-view="chat">
+          <div class="chat-layout">
+            <section class="panel runtime-panel">
+              <div class="panel-head">
+                <div class="panel-title">Runtime</div>
+                <div class="badge">local core</div>
+              </div>
+
+              <div class="signal-card">
+                <div class="signal-row">
+                  <span class="signal-label">Живой вход</span>
+                  <span id="updatedAt" class="signal-stamp">-</span>
+                </div>
+                <div id="liveTranscriptLine" class="signal-text">Пока тишина.</div>
+              </div>
+
+              <div class="runtime-grid">
+                <article class="mini-card">
+                  <div class="mini-label">Последняя команда</div>
+                  <div id="transcriptText" class="mini-value muted">Пока пусто.</div>
+                </article>
+                <article class="mini-card">
+                  <div class="mini-label">Живое распознавание</div>
+                  <div id="partialTranscriptText" class="mini-value muted">Пока тишина.</div>
+                </article>
+                <article class="mini-card">
+                  <div class="mini-label">Ответ</div>
+                  <div id="replyText" class="mini-value muted">Пока без ответа.</div>
+                </article>
+                <article class="mini-card">
+                  <div class="mini-label">Результат</div>
+                  <div id="successValue" class="mini-value">n/a</div>
+                </article>
+              </div>
+
+              <div class="telemetry-grid">
+                <article class="telemetry-card">
+                  <div class="meta-row">
+                    <span class="meta-label">Микрофон</span>
+                    <span id="inputLevelValue" class="meta-value">0%</span>
+                  </div>
+                  <div class="level-bar"><div id="levelFill" class="level-fill"></div></div>
+                  <div class="meta-row">
+                    <span class="meta-label">Состояние</span>
+                    <span id="speechStateValue" class="meta-value">тишина</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Отсечка</span>
+                    <span id="silenceValue" class="meta-value">-</span>
+                  </div>
+                </article>
+
+                <article class="telemetry-card">
+                  <div class="meta-row">
+                    <span class="meta-label">CPU</span>
+                    <span id="cpuValue" class="meta-value">-</span>
+                  </div>
+                  <div class="level-bar"><div id="cpuFill" class="level-fill level-fill-cpu"></div></div>
+                  <div class="meta-row">
+                    <span class="meta-label">RAM</span>
+                    <span id="memoryValue" class="meta-value">-</span>
+                  </div>
+                  <div class="level-bar"><div id="memoryFill" class="level-fill level-fill-memory"></div></div>
+                  <div class="meta-row">
+                    <span class="meta-label">Память</span>
+                    <span id="memoryFootprint" class="meta-value">-</span>
+                  </div>
+                </article>
+
+                <article class="telemetry-card">
+                  <div class="meta-row">
+                    <span class="meta-label">Источник</span>
+                    <span id="commandId" class="meta-value">system</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Модель</span>
+                    <span id="llmModelBadge" class="meta-value">OpenRouter</span>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel chat-panel">
+              <div class="panel-head">
+                <div class="panel-title">Чат с нейросетью</div>
+                <div class="badge">openrouter</div>
+              </div>
+
+              <div id="chatMessages" class="chat-messages"></div>
+
+              <form id="chatForm" class="chat-form">
+                <input id="chatInput" class="chat-input" type="text" placeholder="Введите запрос, сэр..." />
+                <button id="chatSubmit" class="primary-button" type="submit">Отправить</button>
+              </form>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view="commands">
+          <div class="commands-layout">
+            <div class="commands-side">
+              <section class="panel command-guide">
+                <div class="panel-head">
+                  <div class="panel-title">Как собирать команды</div>
+                </div>
+                <div class="guide-grid">
+                  <article class="mini-card">
+                    <div class="mini-label">Шаг 1</div>
+                    <div class="mini-value">
+                      Впишите голосовой триггер построчно. Пример: <code>открой телеграм</code> или
+                      <code>режим кино</code>.
+                    </div>
+                  </article>
+                  <article class="mini-card">
+                    <div class="mini-label">Шаг 2</div>
+                    <div class="mini-value">
+                      Выберите действие: только ответ, shell-команда или HTTP/webhook для умного дома.
+                    </div>
+                  </article>
+                  <article class="mini-card">
+                    <div class="mini-label">Шаг 3</div>
+                    <div class="mini-value">
+                      Выберите озвучку: TTS для живого ответа или свой WAV, если нужен фирменный отклик.
+                    </div>
+                  </article>
+                </div>
+                <div class="example-list">
+                  <div class="example-chip">Фраза: открой браузер -> shell -> start chrome</div>
+                  <div class="example-chip">Фраза: включи свет в спальне -> http -> Home Assistant webhook</div>
+                  <div class="example-chip">Фраза: спокойной ночи -> speak -> выключаю дом, сэр</div>
+                  <div class="example-chip">Фраза: режим тревоги -> wav -> siren.wav</div>
+                </div>
+              </section>
+
+              <section class="panel command-editor">
+                <div class="panel-head">
+                  <div class="panel-title">Редактор команды</div>
+                  <div id="formModeLabel" class="badge">new</div>
+                </div>
+
+                <input id="commandIdInput" class="text-input" type="text" placeholder="ID команды (опционально)" />
+                <textarea id="phrasesInput" class="text-area" rows="4" placeholder="Голосовые триггеры, по одному на строке"></textarea>
+
+                <select id="actionTypeSelect" class="text-input">
+                  <option value="speak">Только ответ / озвучка</option>
+                  <option value="shell">Запустить скрипт / программу</option>
+                  <option value="http">HTTP / webhook</option>
+                </select>
+
+                <textarea id="actionValueInput" class="text-area" rows="4" placeholder="Shell-команда, путь к программе или URL"></textarea>
+
+                <div id="httpFields" class="stack">
+                  <select id="actionMethodSelect" class="text-input">
+                    <option value="POST">POST</option>
+                    <option value="GET">GET</option>
+                    <option value="PUT">PUT</option>
+                    <option value="PATCH">PATCH</option>
+                    <option value="DELETE">DELETE</option>
+                  </select>
+                  <textarea id="headersInput" class="text-area" rows="4" placeholder="HTTP headers в YAML формате"></textarea>
+                  <textarea id="jsonInput" class="text-area" rows="4" placeholder="JSON body в YAML формате"></textarea>
+                </div>
+
+                <select id="audioModeSelect" class="text-input">
+                  <option value="tts">Ответ через TTS</option>
+                  <option value="wav">Проигрывать WAV</option>
+                  <option value="none">Без ответа</option>
+                </select>
+
+                <div id="ttsFields" class="stack">
+                  <textarea id="ttsTextInput" class="text-area" rows="3" placeholder="Текст, который произносить через TTS"></textarea>
+                </div>
+
+                <div id="wavFields" class="stack">
+                  <select id="audioFileSelect" class="text-input"></select>
+                  <input id="audioFileInput" class="text-input" type="file" accept=".wav" />
+                  <div id="audioFileHint" class="help-text">Загружайте WAV. Файл будет сохранён прямо на Raspberry.</div>
+                </div>
+
+                <div class="inline-actions">
+                  <label class="switch-row">
+                    <input id="disabledInput" type="checkbox" />
+                    <span>Отключить команду</span>
+                  </label>
+                  <div class="inline-actions">
+                    <button id="resetCommandBtn" class="ghost-button" type="button">Сбросить</button>
+                    <button id="saveCommandBtn" class="primary-button" type="button">Сохранить</button>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <section class="panel command-list-panel">
+              <div class="panel-head">
+                <div class="panel-title">Библиотека команд</div>
+                <input id="commandSearch" class="search-input" type="search" placeholder="Поиск команд..." />
+              </div>
+              <div id="commandList" class="command-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view="system">
+          <div class="system-layout">
+            <section class="panel">
+              <div class="panel-head">
+                <div class="panel-title">Триггер</div>
+              </div>
+              <div class="stack">
+                <label class="stack">
+                  <span class="mini-label">Слово активации</span>
+                  <input
+                    id="systemTriggerInput"
+                    class="text-input"
+                    type="text"
+                    placeholder="Например, Эй Вега"
+                    autocomplete="off"
+                    spellcheck="false"
+                  />
+                </label>
+                <div class="inline-actions">
+                  <div id="systemTriggerHint" class="help-text">
+                    Измени триггер, и интерфейс подстроится вместе с ним.
+                  </div>
+                  <button id="saveTriggerBtn" class="primary-button" type="button">Сохранить триггер</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel system-audio-panel">
+              <div class="panel-head">
+                <div class="panel-title">Аудио и ввод</div>
+                <button id="refreshAudioDevicesBtn" class="ghost-button small-button" type="button">Обновить</button>
+              </div>
+
+              <div class="stack">
+                <div class="double-grid">
+                  <label class="stack">
+                    <span class="mini-label">Вход</span>
+                    <select id="systemInputSelect" class="text-input"></select>
+                  </label>
+
+                  <label class="stack">
+                    <span class="mini-label">Вывод</span>
+                    <select id="systemOutputSelect" class="text-input"></select>
+                  </label>
+                </div>
+
+                <div class="device-grid">
+                  <article class="mini-card">
+                    <div class="mini-label">Активный микрофон</div>
+                    <div id="systemInputDevice" class="mini-value">-</div>
+                  </article>
+                  <article class="mini-card">
+                    <div class="mini-label">Активный вывод</div>
+                    <div id="systemOutputDevice" class="mini-value">-</div>
+                  </article>
+                </div>
+
+                <div class="inline-actions">
+                  <div id="systemAudioHint" class="help-text">Выберите устройства и примените. Магия сама себя не настроит.</div>
+                  <button id="saveAudioDevicesBtn" class="primary-button" type="button">Применить</button>
+                </div>
+
+                <div id="networkMicPanel" class="mini-card network-mic-panel">
+                  <div class="network-panel-head">
+                    <div>
+                      <div class="mini-label">Wi-Fi микрофон</div>
+                      <div class="network-title">Телефон или Windows-браузер на той же странице</div>
+                    </div>
+                    <div id="browserMicState" class="badge">idle</div>
+                  </div>
+
+                  <div class="double-grid">
+                    <div>
+                      <div class="mini-label">IP / хост</div>
+                      <div id="systemNetworkMicHost" class="mini-value">-</div>
+                    </div>
+                    <div>
+                      <div class="mini-label">URL</div>
+                      <div id="systemNetworkMicUrl" class="mini-value">-</div>
+                    </div>
+                  </div>
+
+                  <div class="inline-actions">
+                    <button id="copyNetworkMicUrlBtn" class="ghost-button small-button" type="button">Скопировать URL</button>
+                    <button id="openNetworkMicUrlBtn" class="ghost-button small-button" type="button">Открыть secure-версию</button>
+                    <button id="startBrowserMicBtn" class="primary-button small-button" type="button">Включить микрофон</button>
+                    <button id="stopBrowserMicBtn" class="ghost-button small-button" type="button">Остановить</button>
+                  </div>
+
+                  <div class="meta-row">
+                    <span class="meta-label">Уровень браузерного микрофона</span>
+                    <span id="browserMicLevelValue" class="meta-value">0%</span>
+                  </div>
+                  <div class="level-bar"><div id="browserMicLevelFill" class="level-fill"></div></div>
+
+                  <div class="meta-row">
+                    <span class="meta-label">Последний клиент</span>
+                    <span id="systemNetworkMicClient" class="meta-value">-</span>
+                  </div>
+                  <div id="systemNetworkMicState" class="help-text">
+                    Выберите вход "Телефон / браузер по Wi-Fi", затем откройте эту же страницу по secure-ссылке и включите микрофон.
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel system-tts-panel">
+              <div class="panel-head">
+                <div class="panel-title">TTS</div>
+                <div id="systemTtsEngineBadge" class="badge">speech</div>
+              </div>
+
+              <div class="stack">
+                <div class="double-grid">
+                  <label class="stack">
+                    <span class="mini-label">Движок</span>
+                    <select id="systemTtsEngineSelect" class="text-input">
+                      <option value="rhvoice">RHVoice</option>
+                      <option value="piper">Piper</option>
+                    </select>
+                  </label>
+
+                  <label id="systemTtsModelGroup" class="stack">
+                    <span class="mini-label">Piper модель</span>
+                    <select id="systemTtsModelSelect" class="text-input"></select>
+                  </label>
+                </div>
+
+                <label id="systemTtsVoiceGroup" class="stack">
+                  <span class="mini-label">Голос RHVoice</span>
+                  <select id="systemTtsVoiceInput" class="text-input"></select>
+                </label>
+
+                <div class="triple-grid">
+                  <label class="stack">
+                    <span class="mini-label">Rate</span>
+                    <input id="systemTtsRateInput" class="text-input" type="number" step="1" />
+                  </label>
+                  <label class="stack">
+                    <span class="mini-label">Pitch</span>
+                    <input id="systemTtsPitchInput" class="text-input" type="number" step="1" />
+                  </label>
+                  <label class="stack">
+                    <span class="mini-label">Volume</span>
+                    <input id="systemTtsVolumeInput" class="text-input" type="number" min="0" max="200" step="1" />
+                  </label>
+                </div>
+
+                <div class="inline-actions">
+                  <div id="systemTtsHint" class="help-text">Сохраняется сразу в конфиг и применяется без рестарта сервиса.</div>
+                  <button id="saveTtsBtn" class="primary-button" type="button">Сохранить TTS</button>
+                </div>
+
+                <label class="stack">
+                  <span class="mini-label">Проверка TTS</span>
+                  <textarea
+                    id="systemTtsTestInput"
+                    class="text-area"
+                    rows="3"
+                    placeholder="Например: Конечно, сэр. Проверка озвучки завершена."
+                  >Конечно, сэр. Проверка озвучки завершена.</textarea>
+                </label>
+
+                <div class="inline-actions">
+                  <div id="systemTtsTestHint" class="help-text">Можно ввести свой текст и тут же прогнать через текущие настройки.</div>
+                  <button id="testTtsBtn" class="ghost-button" type="button">Проверить TTS</button>
+                </div>
+
+                <label class="stack">
+                  <span class="mini-label">Загрузка Piper модели</span>
+                  <input id="systemTtsUploadInput" class="text-input" type="file" accept=".onnx,.json" multiple />
+                </label>
+
+                <div class="inline-actions">
+                  <div id="systemTtsUploadHint" class="help-text">Загрузите .onnx и .json. Файлы сохраняются прямо на Raspberry в каталог TTS.</div>
+                  <button id="uploadTtsBtn" class="ghost-button" type="button">Загрузить модель</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel system-status-panel">
+              <div class="panel-head">
+                <div class="panel-title">Система</div>
+                <div id="systemLlmStatus" class="badge">-</div>
+              </div>
+
+              <div class="system-status-grid">
+                <article class="mini-card">
+                  <div class="mini-label">LLM</div>
+                  <div id="systemModel" class="mini-value">-</div>
+                </article>
+                <article class="mini-card">
+                  <div class="mini-label">CPU</div>
+                  <div id="systemCpuText" class="mini-value">-</div>
+                  <div class="level-bar compact-bar"><div id="systemCpuFill" class="level-fill level-fill-cpu"></div></div>
+                </article>
+                <article class="mini-card">
+                  <div class="mini-label">RAM</div>
+                  <div id="systemRamText" class="mini-value">-</div>
+                  <div class="level-bar compact-bar"><div id="systemRamFill" class="level-fill level-fill-memory"></div></div>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/dashboard.js"></script>
+  </body>
+</html>

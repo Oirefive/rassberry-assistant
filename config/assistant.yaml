@@ -1,0 +1,97 @@
+assistant_name: "\u0414\u0436\u0430\u0440\u0432\u0438\u0441"
+log_level: "INFO"
+log_file: "logs/assistant.log"
+stt_model_path: "models/vosk-model-small-ru-0.22"
+
+audio:
+  input_device: "pipewire-default"
+  output_device: "pipewire-default"
+  sample_rate: 16000
+  channels: 1
+  chunk_ms: 60
+
+wake:
+  phrases:
+    - "\u0434\u0436\u0430\u0440\u0432\u0438\u0441"
+  cooldown_seconds: 2.0
+  min_rms_threshold: 920
+  dynamic_margin: 200
+  dynamic_multiplier: 1.6
+
+listen:
+  pre_speech_timeout: 4.0
+  silence_timeout: 0.28
+  max_record_seconds: 12.0
+  speech_rms_threshold: 430
+  speech_dynamic_margin: 90
+  speech_dynamic_multiplier: 1.25
+  ambient_rms_smoothing: 0.08
+  preroll_ms: 240
+  start_speech_chunks: 2
+  min_speech_seconds: 0.18
+  discard_after_playback_ms: 180
+
+conversation:
+  enabled: true
+  followup_timeout: 6.0
+  max_turns: 6
+  post_wake_guard_seconds: 0.04
+  post_response_guard_seconds: 0.45
+  playback_interrupt_guard_seconds: 0.45
+
+dashboard:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8765
+  https_enabled: true
+  https_port: 9443
+  page_title: "JARVIS"
+  idle_video: "assets/dashboard/idle.mp4"
+  active_video: "assets/dashboard/active.mp4"
+  logo_path: "assets/dashboard/logo.png"
+  state_file: "runtime/dashboard/state.json"
+  tls_cert_file: "runtime/dashboard/cert.pem"
+  tls_key_file: "runtime/dashboard/key.pem"
+
+voice_pack:
+  root: "assets/voice_pack"
+  auto_match_commands: false
+  auto_match_min_score: 0.76
+  event_map:
+    startup:
+      - "\u0412\u0441\u0435 \u041d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u043e"
+      - "\u0412\u0441\u0435 \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b\u044b \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u044b"
+    wake_ack:
+      - "assets/voice_pack/wake_ack.wav"
+    execute: []
+    llm: []
+    not_heard: []
+    error:
+      - "\u0447\u0442\u043e-\u0442\u043e \u043d\u0435 \u0442\u0430\u043a"
+
+tts:
+  engine: "piper"
+  voice: "mikhail"
+  rate: -12
+  pitch: -32
+  volume: 100
+  temp_dir: "runtime/tts"
+  piper_model_path: "tts/piper/ru_RU-irina-medium/ru_RU-irina-medium.onnx"
+  piper_config_path: "tts/piper/ru_RU-irina-medium/ru_RU-irina-medium.onnx.json"
+  piper_length_scale: 0.78
+  piper_noise_scale: 0.72
+  piper_noise_w_scale: 0.82
+  piper_sentence_silence: 0.03
+  piper_volume: 1.05
+
+llm:
+  enabled: true
+  api_url: "https://openrouter.ai/api/v1/chat/completions"
+  model: "openai/gpt-4o"
+  timeout_seconds: 90
+  max_history_messages: 8
+  http_referer: "https://jarvismax.app"
+  app_title: "JARVIS MAX"
+  options:
+    temperature: 0.85
+    max_tokens: 220
