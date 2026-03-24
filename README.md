@@ -95,6 +95,36 @@ python -m unittest discover -s tests
 python -m compileall src tests
 ```
 
+## Быстрый перенос на Raspberry Pi
+
+Если проект уже настроен на ПК и надо быстро докинуть его на Raspberry:
+
+```powershell
+$env:RASPBERRY_PI_PASSWORD="your-pi-password"
+python scripts/deploy_to_pi.py --host 192.168.0.121 --user pi
+```
+
+Это загружает код в `/home/pi/rassberry-assistant`.
+
+Если это первый разворот на новой системе, дальше на Raspberry:
+
+```bash
+ssh pi@192.168.0.121
+cd /home/pi/rassberry-assistant
+cp .env.example .env
+nano .env
+bash scripts/install_pi.sh --app-dir /home/pi/rassberry-assistant --user pi
+```
+
+Если система уже установлена и нужно просто обновить код:
+
+```bash
+ssh pi@192.168.0.121
+cd /home/pi/rassberry-assistant
+git pull
+sudo systemctl restart rassberry-assistant
+```
+
 ## Микрофон
 
 Менять источник микрофона можно двумя путями:
@@ -156,6 +186,38 @@ Dashboard по умолчанию:
 - `http://<raspberry-ip>:8765`
 - `https://<raspberry-ip>:9443`
 
+## Запуск и управление
+
+После установки ассистент стартует сам через `systemd`, так что после обычной перезагрузки руками его поднимать не нужно.
+
+Полезные команды:
+
+```bash
+sudo systemctl status rassberry-assistant
+sudo systemctl start rassberry-assistant
+sudo systemctl stop rassberry-assistant
+sudo systemctl restart rassberry-assistant
+sudo systemctl enable rassberry-assistant
+sudo journalctl -u rassberry-assistant -f
+```
+
+Если после ребута хочешь быстро проверить, жив ли он:
+
+```bash
+systemctl is-active rassberry-assistant
+hostname -I
+```
+
+Что открывать после запуска:
+- dashboard: `http://<raspberry-ip>:8765`
+- dashboard по HTTPS: `https://<raspberry-ip>:9443`
+- VNC: `<raspberry-ip>:5900`
+- SMB-шары: `\\<raspberry-ip>\pi-home` и `\\<raspberry-ip>\rassberry`
+
+Логин по умолчанию для твоей машины сейчас был такой:
+- пользователь: `pi`
+- пароль: тот, который ты задал при установке системы
+
 ## Windows bridge
 
 Windows agent запускает белый список приложений по HTTP.
@@ -178,6 +240,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install_windows_agen
 - не коммить `runtime/`, `logs/`, `models/`, `.tools/`;
 - не коммить личные `wav`, видео и приватные медиа;
 - перед пушем прогонять `python -m unittest discover -s tests`.
+
+В репозитории можно безопасно держать служебные скрытые файлы:
+- `.env.example`
+- `.gitignore`
+- `.editorconfig`
+- `.gitattributes`
+
+А вот `.env`, базы, сертификаты, токены и runtime-мусор надо держать вне публичного GitHub. Иначе это уже не open source, а бесплатная раздача доступа всем желающим.
 
 ## Источники
 
