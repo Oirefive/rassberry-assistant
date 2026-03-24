@@ -8,7 +8,7 @@ audio:
   output_device: "pipewire-default"
   sample_rate: 16000
   channels: 1
-  chunk_ms: 60
+  chunk_ms: 40
 
 wake:
   phrases:
@@ -17,6 +17,9 @@ wake:
   min_rms_threshold: 920
   dynamic_margin: 200
   dynamic_multiplier: 1.6
+  preview_refresh_seconds: 0.16
+  probe_streak_chunks: 2
+  probe_interval_seconds: 0.16
 
 listen:
   pre_speech_timeout: 4.0
@@ -26,8 +29,8 @@ listen:
   speech_dynamic_margin: 90
   speech_dynamic_multiplier: 1.25
   ambient_rms_smoothing: 0.08
-  preroll_ms: 240
-  start_speech_chunks: 2
+  preroll_ms: 160
+  start_speech_chunks: 1
   min_speech_seconds: 0.18
   discard_after_playback_ms: 180
 

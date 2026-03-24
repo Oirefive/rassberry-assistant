@@ -27,6 +27,9 @@ class WakeConfig:
     min_rms_threshold: int = 920
     dynamic_margin: int = 200
     dynamic_multiplier: float = 1.6
+    preview_refresh_seconds: float = 0.18
+    probe_streak_chunks: int = 2
+    probe_interval_seconds: float = 0.18
 
 
 @dataclass(slots=True)

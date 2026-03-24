@@ -471,7 +471,7 @@ class VoiceAssistant:
                 partial_transcript=preview_text if speech_active else "",
             )
             recent_chunks.append(chunk)
-            if speech_active and now - last_preview_at >= 0.28:
+            if speech_active and now - last_preview_at >= self.config.wake.preview_refresh_seconds:
                 last_preview_at = now
                 preview_text = self._transcribe_recent_audio(list(recent_chunks))
                 self._update_input_telemetry(
@@ -501,7 +501,10 @@ class VoiceAssistant:
                 if wake_confirmed:
                     return self._begin_wake_session(inline_transcript)
                 continue
-            if wake_probe_streak >= 3 and now - last_probe_at >= 0.35:
+            if (
+                wake_probe_streak >= self.config.wake.probe_streak_chunks
+                and now - last_probe_at >= self.config.wake.probe_interval_seconds
+            ):
                 last_probe_at = now
                 preview_override = preview_text if self._should_use_preview_for_wake(preview_text) else None
                 wake_confirmed, inline_transcript = self._resolve_wake_from_recent_audio(
@@ -1178,7 +1181,11 @@ class VoiceAssistant:
             wake_probe_streak += 1
             should_probe = self.recognizer.wake_detected(chunk)
             now = time.monotonic()
-            if not should_probe and wake_probe_streak >= 3 and now - last_probe_at >= 0.35:
+            if (
+                not should_probe
+                and wake_probe_streak >= self.config.wake.probe_streak_chunks
+                and now - last_probe_at >= self.config.wake.probe_interval_seconds
+            ):
                 should_probe = True
                 last_probe_at = now
             if not should_probe:
